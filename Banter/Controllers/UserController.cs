@@ -3,6 +3,7 @@ using Banter.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,11 @@ namespace Banter.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _ius;
-        public UserController(IUserService userService)
+        private readonly ILogger<UserController> _logger;
+        public UserController(IUserService userService, ILogger<UserController> logger)
         {
             _ius = userService;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -32,6 +35,7 @@ namespace Banter.Controllers
             }
             else
             {
+                _logger.LogError(registrar.Mensaje);
                 return BadRequest(registrar);
             }
         }
